@@ -45,6 +45,11 @@ def toLittleEndian(word):
     res |= ((word >> 24) & 0xFF) << 0
     return res
 	
+# циклический сдвиг влево на n бит
+def rotateLeft_m(x, n): 
+    x = x & 0xFFFFFFFF
+    return ((x << n) | (x >> (32-n))) & 0xFFFFFFFF 
+
 	
 # циклический сдвиг влево на n бит
 def rotateLeft(x, n): 

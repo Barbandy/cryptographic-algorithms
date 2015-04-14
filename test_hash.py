@@ -1,7 +1,5 @@
 #coding: UTF-8
-import hashlib
-import pytest
-import subprocess
+import hashlib, pytest, subprocess
 from hypothesis import given
 import md5, ripemd160, sha1, gost94
 
@@ -42,17 +40,21 @@ def hash_gost94(text):
     out = out[9:-1]
     return out	
 
+	
 @given(str)	  	
 def test_md5():
     assert hash_md5(data) == md5.calc_md5(data)	
 
+	
 @given(str)	
 def test_ripemd160():
     assert hash_ripemd160(data) == ripemd160.calc_ripemd160(data)
 	
+	
 @given(str)	
 def test_sha1():
     assert hash_sha1(data) == sha1.calc_sha1(data)
+	
 	
 @given(str)		
 def test_gost94():

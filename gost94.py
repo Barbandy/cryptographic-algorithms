@@ -187,13 +187,14 @@ def calc_gost94(msg):
     L[(len(msg) / 32) % 32] = 1
    
     # 2 # функция сжатия финальной итерации:
-    if len(msg) % 32:
-        L[0] = (len(msg) % 32) * 8
-        Mi = msg[-(len(msg) % 32):] + [0] * (32 - len(msg) % 32)
-        h = f(h, Mi)
-        # вычисление контрольной суммы сообщения
-        Sum = calcSum(Sum, Mi)
+   # if len(msg) % 32:
+    L[0] = (len(msg) % 32) * 8
+    Mi = msg[-(len(msg) % 32):] + [0] * (32 - len(msg) % 32)
+    #h = f(h, Mi)
+    # вычисление контрольной суммы сообщения
+    Sum = calcSum(Sum, Mi)
 
+    h = f(h, Mi)
     h = f(h, L)
     h = f(h, Sum)
 

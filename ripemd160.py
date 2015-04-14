@@ -91,18 +91,18 @@ def rounds(buf, x):
 	# Выполнение алгоритма происходит по двум параллельным путям	
     for j in range(80):
         T = A + F(j, B, C, D) + x[R[j]] + K(j)
-        T = com_func.rotateLeft(T, S[j]) + E 
+        T = com_func.rotateLeft_m(T, S[j]) + E 
         A = E
         E = D
-        D = com_func.rotateLeft(C, 10)
+        D = com_func.rotateLeft_m(C, 10)
         C = B
         B = T
 		
         T = A1 + F(79 - j, B1, C1, D1) + x[R1[j]] + K1(j)
-        T = com_func.rotateLeft(T, S1[j]) + E1 	
+        T = com_func.rotateLeft_m(T, S1[j]) + E1 	
         A1 = E1
         E1 = D1
-        D1 = com_func.rotateLeft(C1, 10)
+        D1 = com_func.rotateLeft_m(C1, 10)
         C1 = B1
         B1 = T
 		
