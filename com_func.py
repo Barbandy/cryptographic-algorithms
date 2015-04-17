@@ -2,6 +2,7 @@
 #coding: UTF-8
 import argparse
 
+
 def writeFile(fname, code):
     try:
         with open(fname, 'wb') as f:
@@ -26,7 +27,6 @@ def getArgs():
     return parser.parse_args()	
 	
 
-	# Выравнивание потока и добавление длины сообщения
 def alignment(msg):
     msg_len = len(msg) * 8
     msg.append(0x80)
@@ -45,12 +45,11 @@ def toLittleEndian(word):
     res |= ((word >> 24) & 0xFF) << 0
     return res
 	
-# циклический сдвиг влево на n бит
-def rotateLeft_m(x, n): 
-    x = x & 0xFFFFFFFF
+	
+def rotateLeft_m(x, n):
+    x = x & 0xFFFFFFFF  
     return ((x << n) | (x >> (32-n))) & 0xFFFFFFFF 
 
 	
-# циклический сдвиг влево на n бит
 def rotateLeft(x, n): 
     return ((x << n) | (x >> (32-n))) & 0xFFFFFFFF 	

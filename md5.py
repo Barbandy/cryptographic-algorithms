@@ -1,4 +1,4 @@
-﻿#! /usr/bin/python
+﻿﻿#! /usr/bin/python
 #coding: UTF-8
 import com_func 
 	
@@ -24,7 +24,7 @@ def operator(fun, a, b, c, d, x, s, ac):
     a = a + fun (b, c, d) + (x) + (ac)
     a = com_func.rotateLeft_m (a, s)
     a = a + b
-    return a 	
+    return a	
 
 def rounds(buf, x):
     a = buf[0]
@@ -33,13 +33,28 @@ def rounds(buf, x):
     d = buf[3]
 	
     # Определяем константы, которые потребуются далее
-    S11, S12, S13, S14 = 7, 12, 17, 22
-    S21, S22, S23, S24 = 5, 9, 14, 20
-    S31, S32, S33, S34 = 4, 11, 16, 23
-    S41, S42, S43, S44 = 6, 10, 15, 21
+    S11 = 7
+    S12 = 12
+    S13 = 17
+    S14 = 22
+	
+    S21 = 5
+    S22 = 9
+    S23 = 14
+    S24 = 20
+	
+    S31 = 4
+    S32 = 11
+    S33 = 16
+    S34 = 23
+	
+    S41 = 6
+    S42 = 10
+    S43 = 15
+    S44 = 21
 	
     # раунд 1
-    a = operator(F, a, b, c, d, x[ 0], S11, 0xd76aa478)
+    a = operator(F, a, b, c, d, x[0], S11, 0xd76aa478)
     d = operator(F, d, a, b, c, x[ 1], S12, 0xe8c7b756)
     c = operator(F, c, d, a, b, x[ 2], S13, 0x242070db)
     b = operator(F, b, c, d, a, x[ 3], S14, 0xc1bdceee)
@@ -145,6 +160,9 @@ def calc_md5(data):
         buf = rounds(buf, x)
 			
     # Шаг 5 Результат вычислений находся в буфере
+    ''''  Если выводить побайтово, начиная с младшего байта  
+    и закончив старшим байтом, то мы получим MD5-хеш  из 32 шестнадцатеричных цифр '''	
+
     res = ""
     for i in buf:
         res += "{:08x}".format(com_func.toLittleEndian(i))
