@@ -56,12 +56,18 @@ def A(Y):
         res[i + 24] = Y[i] ^ Y[i + 8]
     return res
 
+	
+def fi(arg):
+    i = arg & 0x03
+    k = arg >> 2
+    k +=1
+    return (i << 3) + k - 1
+
 
 def phi(Y):
     res = [0] * 32
-    for i in range(4):
-        for k in range(1, 9):
-            res[i + 1 + 4 * (k - 1) -1] = Y[8 * i + k -1]
+    for i in range(32):
+        res[i] = Y[fi(i)]
     return res
 
 
@@ -130,14 +136,21 @@ def one_step(A, K):
         res[i >> 1] ^= x
         if i & 1:
             x >>= 4
+        else:
+            x >>= 0
 
         x = S[i][x]
         if i & 1:
             res[i >> 1] |= x << 4
         else:
-            res[i >> 1] |= x
-
-    res = [res[3]] + res[:3]
+            res[i >> 1] |= x << 0
+			
+    tmp = res[3]                                    
+    res[3] = res[2]
+    res[2] = res[1]
+    res[1] = res[0]
+    res[0] = tmp
+	
     tmp = res[0] >> 5
 
     for i in range(1, 4):
@@ -157,16 +170,22 @@ def calcSum(Sum, m):
         c >>= 8
     return Sum
 
+	
 def psi(Y, n):
-    for i in range(n):
+    while n:
+        n=n-1
         tmp = [0, 0]
         indexes = [1, 2, 3, 4, 13, 16]
         for j in indexes:
             tmp[0] ^= Y[2 * (j - 1)]
             tmp[1] ^= Y[2 * (j - 1) + 1]
-        Y = Y[2:] + tmp
+        for i in range(30):
+            Y[i] = Y[i+2]
+        Y[30] = tmp[0]
+        Y[31] = tmp[1]
     return Y
 
+	
 def calc_gost94(msg):
     msg = [ord(i) for i in msg]
    
@@ -182,27 +201,30 @@ def calc_gost94(msg):
         h = f(h, Mi)
         # итерация вычисления контрольной суммы
         Sum = calcSum(Sum, Mi)
+
     
     # вычисления длины сообщения
-    L[(len(msg) / 32) % 32] = 1
-   
-    # 2 # функция сжатия финальной итерации:
-   # if len(msg) % 32:
-    L[0] = (len(msg) % 32) * 8
-    Mi = msg[-(len(msg) % 32):] + [0] * (32 - len(msg) % 32)
-    #h = f(h, Mi)
-    # вычисление контрольной суммы сообщения
-    Sum = calcSum(Sum, Mi)
+    c = len(msg) << 3
+    for i in range(32):
+        L[i] = c & 0xff
+        c >>= 8
 
-    h = f(h, Mi)
+    # 2 # функция сжатия финальной итерации:
+    if len(msg) % 32:
+        L[0] = (len(msg) % 32) * 8
+        print "L = ", L
+        Mi = msg[-(len(msg) % 32):] + [0] * (32 - len(msg) % 32)
+        h = f(h, Mi)
+        # вычисление контрольной суммы сообщения
+        Sum = calcSum(Sum, Mi)
+
     h = f(h, L)
     h = f(h, Sum)
-
+	
     res = ""
     for i in h:
         res += "{:02x}".format(i)
     return res	
-	
 	
 	
 def main():

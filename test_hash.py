@@ -42,20 +42,20 @@ def hash_gost94(text):
 
 	
 @given(str)	  	
-def test_md5():
+def test_md5(data):
     assert hash_md5(data) == md5.calc_md5(data)	
 
 	
 @given(str)	
-def test_ripemd160():
+def test_ripemd160(data):
     assert hash_ripemd160(data) == ripemd160.calc_ripemd160(data)
 	
 	
 @given(str)	
-def test_sha1():
+def test_sha1(data):
     assert hash_sha1(data) == sha1.calc_sha1(data)
 	
 	
 @given(str)		
-def test_gost94():
+def test_gost94(data):
     assert  hash_gost94(data) == gost94.calc_gost94(data)
